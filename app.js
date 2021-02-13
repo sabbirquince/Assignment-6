@@ -1,12 +1,13 @@
 const imagesArea = document.querySelector(".images");
 const gallery = document.querySelector(".gallery");
 const galleryHeader = document.querySelector(".gallery-header");
+const searchField = document.getElementById("search");
 const searchBtn = document.getElementById("search-btn");
 const sliderBtn = document.getElementById("create-slider");
 const sliderContainer = document.getElementById("sliders");
+
 // selected image
 let sliders = [];
-console.log(sliders);
 
 // If this key doesn't work
 // Find the name in the url and go to their website
@@ -19,24 +20,33 @@ const getImages = (query) => {
     `https://pixabay.com/api/?key=${key}&q=${query}&image_type=photo&pretty=true`
   )
     .then((response) => response.json())
-    .then((data) => showImages(data.hits))
+    .then((data) => showImages(data.hits)) /////// BUG:1
     .catch((err) => console.log(err));
 };
 
 // show images
 const showImages = (images) => {
+  console.log(images);
   imagesArea.style.display = "block";
   gallery.innerHTML = "";
 
   // show gallery title
   galleryHeader.style.display = "flex";
 
-  images.forEach((image) => {
+  if (images.length !== 0) {
+    images.forEach((image) => {
+      let div = document.createElement("div");
+      div.className = "col-lg-3 col-md-4 col-xs-6 img-item mb-2";
+      div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
+      gallery.appendChild(div);
+    });
+  } else {
     let div = document.createElement("div");
-    div.className = "col-lg-3 col-md-4 col-xs-6 img-item mb-2";
-    div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
+    div.className = "no-result";
+    div.innerHTML = `No Image Found!`;
     gallery.appendChild(div);
-  });
+    imagesArea.style.display = "none";
+  }
 };
 
 let slideIndex = 0;
@@ -45,13 +55,14 @@ const selectItem = (event, img) => {
   let element = event.target;
   element.classList.toggle("added");
 
+  /////////////////// FEATURE 1: TOGGLE IMAGE & UPDATING ARRAY ISSUE //////////////
   let item = sliders.indexOf(img);
 
   if (item === -1) {
     sliders.push(img);
   } else {
-    const updateSlider = sliders.filter((x) => x !== img);
-    sliders = updateSlider;
+    const updateSliders = sliders.filter((x) => x !== img);
+    sliders = updateSliders;
   }
 };
 
@@ -78,9 +89,10 @@ const createSlider = () => {
 
   // hide image aria
   imagesArea.style.display = "none";
+  gallery.style.display = "none";
 
   // converting duration value into positive integer
-  const durationValue = Math.abs(document.getElementById("duration").value);
+  const durationValue = Math.abs(document.getElementById("duration").value); /////// BUG: 3
 
   const duration = durationValue || 1000;
   sliders.forEach((slide) => {
@@ -129,6 +141,13 @@ searchBtn.addEventListener("click", function () {
   const search = document.getElementById("search");
   getImages(search.value);
   sliders.length = 0;
+});
+
+/////// FEATURE 2: ADDING KEY 'ENTER' TO SEARCH BUTTON /////////
+searchField.addEventListener("keypress", (event) => {
+  if (event.key == "Enter") {
+    searchBtn.click();
+  }
 });
 
 sliderBtn.addEventListener("click", function () {

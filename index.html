@@ -15,10 +15,10 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
-  <div class="container">
+<body class="bg-light">
+  <div class="container mt-5">
 
-    <h4 class="mt-2 text-center">Search Image for create slider</h4>
+    <h4 class="mt-2 text-center">Search Image For Creating Slider</h4>
 
 
     <div class="form-inline mt-3 d-flex justify-content-center">
@@ -31,11 +31,12 @@
 
     <section class="images">
 
-      <div class="justify-content-around align-items-center mt-3 gallery-header mb-2">
+      <div class="justify-content-around align-items-center py-3 my-3 border rounded rounded-3 gallery-header">
 
-        <h3 class="head-title text-center">Select image for create slider</h3>
+        <h3 class="head-title text-center">Select Image to Create Slider</h3>
 
         <div class="input-group col-md-3 mb-2 mb-md-0">
+          <!-- BUG: 3 -->
           <input class="form-control" id="duration" placeholder="slider change duration">
         </div>
 
@@ -43,11 +44,9 @@
 
       </div>
 
-
-      <div class="row gallery"></div>
-
     </section>
 
+    <div class="row gallery py-4"></div>
 
     <!-- slider -->
     <div class="main">
