@@ -1,3 +1,7 @@
+body {
+  background-color: rgba(53, 121, 153, 0.425);
+}
+
 #sliders {
   height: 400px;
   width: 60%;
