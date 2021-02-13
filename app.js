@@ -26,7 +26,6 @@ const getImages = (query) => {
 
 // show images
 const showImages = (images) => {
-  console.log(images);
   imagesArea.style.display = "block";
   gallery.innerHTML = "";
 
@@ -61,7 +60,7 @@ const selectItem = (event, img) => {
   if (item === -1) {
     sliders.push(img);
   } else {
-    const updateSliders = sliders.filter((x) => x !== img);
+    const updateSliders = sliders.filter((singleImg) => singleImg !== img);
     sliders = updateSliders;
   }
 };
@@ -91,10 +90,16 @@ const createSlider = () => {
   imagesArea.style.display = "none";
   gallery.style.display = "none";
 
-  // converting duration value into positive integer
-  const durationValue = Math.abs(document.getElementById("duration").value); /////// BUG: 3
+  // fixing if negative duration comes
+  const durationValue = document.getElementById("duration").value; /////// BUG: 3
+  let duration;
 
-  const duration = durationValue || 1000;
+  if (durationValue < 0) {
+    duration = 1000;
+  } else {
+    duration = durationValue || 1000;
+  }
+
   sliders.forEach((slide) => {
     let item = document.createElement("div");
     item.className = "slider-item";
