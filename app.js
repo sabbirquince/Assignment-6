@@ -9,13 +9,12 @@ const sliderContainer = document.getElementById("sliders");
 // selected image
 let sliders = [];
 
-// If this key doesn't work
-// Find the name in the url and go to their website
-// to create your own api key
 const key = "20264296-53f22ab187689f2f025535ebc";
 
 // images fetching API function
 const getImages = (query) => {
+  loadSpinner();
+
   fetch(
     `https://pixabay.com/api/?key=${key}&q=${query}&image_type=photo&pretty=true`
   )
@@ -40,21 +39,24 @@ const showImages = (images) => {
       gallery.appendChild(div);
     });
   } else {
+    ///// EXTRA FEATURE 1: NO IMAGES FOUND //////
     let div = document.createElement("div");
     div.className = "no-result";
     div.innerHTML = `No Image Found!`;
     gallery.appendChild(div);
     imagesArea.style.display = "none";
   }
+
+  loadSpinner();
 };
 
 let slideIndex = 0;
 
 const selectItem = (event, img) => {
   let element = event.target;
-  element.classList.toggle("added");
 
   /////////////////// FEATURE 1: TOGGLE IMAGE & UPDATING ARRAY ISSUE //////////////
+  element.classList.toggle("added");
   let item = sliders.indexOf(img);
 
   if (item === -1) {
@@ -90,7 +92,7 @@ const createSlider = () => {
   imagesArea.style.display = "none";
   gallery.style.display = "none";
 
-  // fixing if negative duration comes
+  ////// BUG 3: FIXING NEGATIVE DURATION ISSUE ///////
   const durationValue = document.getElementById("duration").value; /////// BUG: 3
   let duration;
 
@@ -158,3 +160,11 @@ searchField.addEventListener("keypress", (event) => {
 sliderBtn.addEventListener("click", function () {
   createSlider();
 });
+
+//////// EXTRA FEATURE 2: SPINNER TOGGLE ///////
+const loadSpinner = () => {
+  const spinnerId = document.getElementById("spinner-circle");
+  const imageBox = document.getElementById("image-box");
+  spinnerId.classList.toggle("d-none");
+  imageBox.classList.toggle("d-none");
+};
